@@ -1,0 +1,210 @@
+---
+title: "Final Project"
+author: "Tana Liu, Tajhini Brown"
+format: pdf
+---
+
+### Loading the Data
+```{r}
+library(tidyverse)
+
+spotify <- read.csv("/Users/tanaliu/Desktop/CSC293/Final Project/dataset.csv")
+spotify <- subset(spotify, select = -X )
+```
+
+### Determining Variable Importance 
+```{r}
+library(randomForest)
+set.seed(1)
+
+# Setting character variables as factors
+spotify$track_genre <- factor(spotify$track_genre) 
+
+# Creating training and testing datasets
+train <- sample(1:nrow(spotify), nrow(spotify) / 2)
+test <- spotify[-train, ]
+
+# random forest model
+rf <- randomForest(track_genre ~ time_signature + tempo + valence + liveness + instrumentalness + acousticness + speechiness + mode + loudness + key + energy + danceability + explicit + duration_ms, data = spotify, subset = train, mtry = sqrt(14), ntree = 25, importance = TRUE)
+
+yhat_rf <- predict(rf, newdata = spotify[-train, ])
+
+importance(rf)
+varImpPlot(rf)
+```
+
+### Picking the Top 3 and Bottom 3 Variables Per Genre 
+
+Acoustic
+  - Top 3: energy, duration_ms, acousticness
+  - Bottom 3: explicit, time_signature, danceability
+Afrobeat
+  - Top 3: instrumentalness, valence, energy
+  - Bottom 3: mode, key, time_signature 
+Alt-Rock
+  - Top 3: energy, valence, acousticness
+  - Bottom 3: explicit, time_signature, mode
+Alternative
+  - Top 3: acousticness, instrumentalness, danceability
+  - Bottom 3: time_signature, mode, explicit
+Ambient
+  - Top 3: instrumentalness, valence, loudness
+  - Bottom 3: mode, key, explicit
+Anime
+  - Top 3: instrumentalness, valence, energy
+  - Bottom 3: key, liveness, time_signature
+Black Metal
+  - Top 3: danceability, acousticness, valence
+  - Bottom 3: mode, tempo, explicit
+Bluegrass
+  - Top 3: valence, speechiness, loudness
+  - Bottom 3: key, time_signature, explicit
+Blues
+  - Top 3: energy, acousticness, valence
+  - Bottom 3: time_signature, key, mode
+Brazil
+  - Top 3: instrumentalness, duration_ms, valence
+  - Bottom 3: loudness, key, liveness
+Breakbeat
+  - Top 3: acousticness, instrumentalness, tempo 
+  - Bottom 3: mode, time_signature, key
+British
+  - Top 3: energy, danceability, valence
+  - Bottom 3: time_signature, tempo, key
+Cantopop
+  - Top 3: instrumentalness, energy, acousticness
+  - Bottom 3: key, tempo, time_signature
+Chicago House
+  - Top 3: danceability, acousticness, duration_ms
+  - Bottom 3: key, mode, time_signature
+Children
+  - Top 3: duration_ms, danceability, acousticness
+  - Bottom 3: time_signature, speechiness, liveness
+Chill
+  - Top 3: duration_ms, energy, acousticness
+  - Bottom 3: time_signature, explicit, mode
+Classical
+  - Top 3: duration_ms, instrumentalness, acousticness
+  - Bottom 3: time_signature, explicit, key
+Club
+  - Top 3: instrumentalness (13.99), valence (11.74), danceability (8.4)
+  - Bottom 3: explicit (-0.99), key (1.67), liveness (2.46)
+Comedy
+  - Top 3: speechiness (28.69), danceability (6.94), acousticness (6.66)
+  - Bottom 3: mode (0.004), key (1.3), time_signature (1.3)
+Country
+  - Top 3: duration_ms (28.73), energy (27.35), valence (25.61)
+  - Bottom 3: explicit (5.19), time_signature (6.76), mode (10.35)
+Dance
+  - Top 3: loudness (25.41), acousticness (24.79), danceability (24.57)
+  - Bottom 3: time_signature (4.03), mode (6.49), key (11.01)
+Dancehall
+  - Top 3: energy (14.43), danceability (12.88), speechiness (12.1)
+  - Bottom 3: mode (3.36), key (3.42), liveness (3.48)
+Death Metal
+  - Top 3: acousticness (10.8), energy (10.05), danceability (9.01)
+  - Bottom 3: time_signature (-2.54), liveness (-1.22), key (-1.07)
+Deep House
+  - Top 3: tempo (8.4), danceability (8.16), instrumentalness (5.36)
+  - Bottom 3: time_signature (-1.47), liveness (0.15), key (0.31)
+Detroit Techno
+  - Top 3: instrumentalness (14.21), tempo (12.64), duration_ms (11.34)
+  - Bottom 3: key (0.5), mode (0.52), liveness (0.61)
+Disco
+  - Top 3: instrumentalness (13.21), tempo (12.81), duration_ms (12.42)
+  - Bottom 3: time_signature (0.77), mode (2.61), explicit (2.73)
+Disney
+  - Top 3: duration_ms (23.15), energy (12.91), instumentalness (12.59)
+  - Bottom 3: time_signature (1.37), explicit (2.66), mode (3.72)
+Drum-and-bass
+  - Top 3: tempo (31.26), instrumentalness (15.17), loudness (14.9)
+  - Bottom 3: mode (0.75), key (1.61), time_signature (2.42)
+Dub
+  - Top 3:
+  - Bottom 3:
+Dubstep:
+EDM:
+Electro:
+Electronic:
+Emo:
+Folk:
+Forro:
+French:
+Funk:
+Garage:
+German:
+Gospel:
+Goth:
+Grindcore:
+Groove:
+Grunge:
+Guitar:
+Happy:
+Hard Rock:
+Hardcore:
+Hardstyle:
+Heavy Metal:
+Hip Hop:
+Honky Tonk:
+House:
+IDM:
+Indian:
+Indie:
+Indie Pop:
+Industrial:
+Iranian:
+J-Dance:
+J-Idol:
+J-Pop:
+J-Rock:
+Jazz:
+K-Pop:
+Kids:
+Latin:
+Latino:
+Malay:
+Mandopop:
+Metal:
+Metalcore:
+Minimal Techno:
+MPB:
+New Age:
+Opera:
+Pagode:
+Party:
+Piano:
+Pop:
+Pop Film:
+Power Pop:
+Progressive House:
+Psych Rock:
+Punk:
+Punk Rock:
+RnB: 
+Reggae:
+Reggaeton:
+Rock:
+Rock n Roll:
+Rockabilly:
+Romance:
+Sad:
+Salsa:
+Samba: 
+Sertanejo:
+Show Tunes:
+Singer-songwriter:
+Ska:
+Sleep:
+Songwriter:
+Soul:
+Spanish:
+Study:
+Swedish:
+Synth Pop:
+Tango:
+Techno:
+Trance:
+Trip Hop:
+Turkish:
+World Music:
+

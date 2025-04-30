@@ -1,0 +1,108 @@
+---
+title: "Final Project - Data Appendix"
+author: "Tana Liu, Tajhini Brown"
+format: pdf
+---
+
+## Part 1: Loading and Cleaning the Data
+
+```{r}
+# Loading necessary libraries
+library(tidyverse)
+
+# Reading in the data
+data <- read.csv("/Users/tanaliu/Desktop/CSC293/Final Project/dataset.csv")
+
+# Checking for missing values
+sapply(data, function(x) sum(is.na(x)))
+
+# Removing the first column as it only tracks the number of observations in the dataset
+data <- subset(data, select = -X )
+```
+
+## Describe the Data
+
+Dataset: Spotify Tracks Dataset
+Filename: dataset.csv
+
+### Variables
+
+track_id: the Spotify ID for the track
+  - Discrete data containing a unique combination of 22 numbers and letters
+
+artists: the artist(s)'s name(s) who performed the track; if there is more than one artist, they are separated by a ";"
+  - Discrete data 
+  
+album_name: the album name in which the track appears
+  - Discrete data
+  
+track_name: name of the track
+  - Discrete data
+  
+popularity: the popularity of a track as a value between 0 and 100 with 100 being the most popular; popularity is determined by an algorithm based on the total number of plays and how recent those plays are
+  - Continuous numeric data
+  - Range: 0 to 100 
+  
+duration_ms: the track length in milliseconds
+  - Continuous numeric data
+  
+explicit: whether or not the track has explicit lyrics; 1 = yes, 0 = otherwise (no or unknown)
+  - Discrete data
+  - Binary variable
+  
+danceability: how suitable a track is for dancing based on several musical elements like tempo, rhythm stability, beat strength, and overall regularity; 0.0 is least danceable and 1.0 is most danceable
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+  
+energy: represents a perceptual measure of intensity and activity as energetic tracks typically feel fast, loud, and noisy; 0.0 is least energetic and 1.0 is most energetic 
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+  
+key: the key the track is in where integers map to pitches using standard Pitch Class notation; e.g. 0 = C, 1 = C♯/D♭, 2 = D, -1 = no key detected, etc.
+  - Categorical data
+  - Categories: -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+  
+loudness: the overall loudness of a track in decibels (dB)
+  - Continuous numeric data 
+  
+mode: indicates modality (major or minor) of a track; 1 = major, 0 = minor
+  - Discrete data
+  - Binary variable
+  
+speechiness: detects the presence of spoken words in a track; 0.0 is least speechy and 1.0 is most speechy where values > 0.66 describe tracks that probably made entirely of spoken words, 0.33 < values < 0.66 describe tracks that may contain both music and speech either in sections or as layers, and values < 0.33 describe tracks that are most likely music and other non-speech-like tracks
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+  
+acousticness: a confidence measure of whether the track is acoustic; 0.0 = low confidence, 1.0 = high confidence
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+  
+instrumentalness: predicts whether a track contains no vocals; 1.0 = high likelihood that the track contains no vocal content, 0.0 = low likelihood
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+
+liveness: detects the presence of an audience in the recording; 0.0 = low probability that the track was perfomed live, 1.0 = high probability where a value > 0.8 provides strong likelihood that the track is live
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+  
+valence: describes the musical positiveness conveyed by a track as tracks with high valence sound more positive (e.g. happy, cheerful, euphoric); 0.0 = low valence, 1.0 = high valence
+  - Continuous numeric data
+  - Range: 0.0 to 1.0
+
+tempo: the overall estimated tempo of a track in beats per minute (BPM)
+  - Discrete numeric data 
+
+time_signature: an estimated time signature to specifiy how many beats are in each bar; ranges from 3 to 7 indicating time signatures of 3/4 to 7/4
+  - Categorical data
+  - Categories: 3, 4, 5, 6, 7
+
+track_genre: the genre in which the track belongs
+  - Discrete data 
+
+## Pressing Issues
+
+1. Although the time_signature is supposed to range from 3 to 7, values from 0 to 2 are included and assigned frequently as well. We will need to understand why that is and if it represents something other than a valid time signature. Additionally, based on the discussion of this dataset on Kaggle, it seems that time signatures are also mislabeled.
+
+2. We also do not have any information on the time period of when these songs were collected and/or their release years Since music evolve and transform over time, often due to external sociopolitical factors, it can be important to keep in mind the context in which a song is made as this influences track classification. It also reflects the state of a genre at a specific period of time, which may differ from our current perception of it.
+
+3. Although this dataset is taken directly from the Spotify API, Spotify doesn't provide the track_genre column. This leads us to question how the genre of each song was determined, particularly since many songs span multiple genres and/or subscribe to subgenres.

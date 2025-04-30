@@ -1,0 +1,47 @@
+---
+title: "Final Project - Preliminary Model"
+author: "Tana Liu, Tajhini Brown"
+format: pdf
+---
+
+### Trying a Linear Model
+```{r}
+library(tidyverse)
+
+spotify <- read.csv("/Users/tanaliu/Desktop/CSC293/Final Project/dataset.csv")
+spotify <- subset(spotify, select = -X )
+
+```
+
+```{r}
+#model_1 <- lm(track_genre ~ time_signature + tempo + valence + liveness + instrumentalness + acousticness + speechiness + mode + loudness + key + energy + danceability + explicit + duration_ms, data = data)
+
+#model_2 <- glm(track_genre ~ time_signature + tempo + valence + liveness + instrumentalness + acousticness + speechiness + mode + loudness + key + energy + danceability + explicit + duration_ms, data = data)
+```
+
+Model 1 will not run as a valid model because we are attempting to use numerical values to predict a categorical y variable. However, a logistic regression model as seen in Model 2 also will not work because there are multiple categories to classify to, not just 2. 
+
+### Trees
+```{r}
+library(randomForest)
+set.seed(1)
+
+# Setting character variables as factors
+spotify$track_genre <- factor(spotify$track_genre) 
+
+# Creating training and testing datasets
+train <- sample(1:nrow(spotify), nrow(spotify) / 2)
+test <- spotify[-train, ]
+
+# random forest model
+rf <- randomForest(track_genre ~ time_signature + tempo + valence + liveness + instrumentalness + acousticness + speechiness + mode + loudness + key + energy + danceability + explicit + duration_ms, data = spotify, subset = train, mtry = sqrt(14), ntree = 25, importance = TRUE)
+
+yhat_rf <- predict(rf, newdata = spotify[-train, ])
+
+importance(rf)
+varImpPlot(rf)
+```
+
+We decided to use trees, specifically the random forest model to rank the importance of each of our variables in classifying songs by genre. We were able to produce a working random forest model along with a visual of mean decrease of accuracy and a measure of the total decrease in node impurity. For our next steps, we would like to work with Professor Jordan to better understand these measures of variable importance and perhaps work towards a better classification model. We also ran into issues with calculating the test MSE with the prediction and test dataset, so we would like to request assistance in debugging that as well.
+
+
